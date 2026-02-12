@@ -1,140 +1,175 @@
-export const passportIdentity = {
-  passportId: "did:web:batterypass.eu:CZB:BP00042",
-  modelNumber: "EV-LI-2024-PRO",
-  serialNumber: "CZB-BP-2024-00042",
-  category: "EV",
-  weight: "499.00 kg",
-  status: "Original",
-  manufacturedDate: "2024-03-15",
-  manufacturer: {
-    name: "CellZone Battery GmbH",
-    address: "Musterstraße 12, 80331 München, Germany",
-  },
-  economicOperator: "EuroCell Distribution AG",
-  verificationHash: "0x7f3a…b2c1",
+// ========================================================
+// Battery Passport Data — sourced from Industrial Battery CSV
+// Categories map to tabs; subcategories map to card sections
+// ========================================================
+
+// ── Tab 1: Identifiers and Product Data ──────────────────
+export const dppInfo = {
+  schemaVersion: "1.0.0",
+  status: "active",
+  granularity: "battery pack",
+  lastUpdated: "2026-02-11T08:15:00Z",
 };
 
-export const generalInfo = {
-  chemistry: "Lithium Nickel Manganese Cobalt Oxide (NMC 811)",
-  ratedCapacity: "75.0 kWh",
-  nominalVoltage: "400 V",
-  minVoltage: "280 V",
-  maxVoltage: "450 V",
-  expectedLifetimeCycles: 1500,
-  expectedLifetimeYears: 8,
-  tempRangeUpper: "45 °C",
-  tempRangeLower: "-20 °C",
-  cellType: "Prismatic",
-  dimensions: "1,800 × 1,200 × 150 mm",
-  energyDensity: "250 Wh/kg",
-  maxChargePower: "150 kW",
-  maxDischargePower: "200 kW",
+export const identifiers = {
+  passportId: "urn:bp:2026:IND:LA:000001",
+  batteryId: "SN-IND-LA-24V185Ah-000001",
+  economicOperatorId: "EORI:BG123456789000",
+  manufacturerId: "urn:org:elhim-iskra-jsc",
+  facilityId: "urn:facility:pazardzhik-bg:elt-line-01",
 };
 
-export const performanceData = {
-  stateOfHealth: 98.5,
-  originalPowerCapability: 200,
-  currentPowerCapability: 197,
-  roundTripEfficiency: 95.2,
-  internalResistance: "0.8 mΩ",
-  capacityFade: [
-    { month: "0", capacity: 100 },
-    { month: "6", capacity: 99.2 },
-    { month: "12", capacity: 98.5 },
-    { month: "18", capacity: 97.8 },
-    { month: "24", capacity: 97.1 },
-    { month: "30", capacity: 96.5 },
-    { month: "36", capacity: 95.9 },
-    { month: "42", capacity: 95.3 },
-    { month: "48", capacity: 94.7 },
-  ],
-  powerFade: [
-    { month: "0", power: 100 },
-    { month: "6", power: 99.5 },
-    { month: "12", power: 99.0 },
-    { month: "18", power: 98.4 },
-    { month: "24", power: 97.9 },
-    { month: "30", power: 97.3 },
-    { month: "36", power: 96.8 },
-    { month: "42", power: 96.2 },
-    { month: "48", power: 95.7 },
-  ],
+export const productData = {
+  manufacturerInfo: "Elhim-Iskra JSC; compliance contact: compliance@example.com; country: BG",
+  manufacturingPlace: "Pazardzhik, Bulgaria",
+  manufacturingDate: "2025-11",
+  warrantyPeriod: "2027-11",
+  batteryCategory: "Industrial rechargeable battery (>2kWh) – Flooded lead-acid traction pack (24 V, 185 Ah @C5, ~4.44 kWh)",
+  batteryMass: 126, // kg
+  batteryStatus: "in service",
 };
 
-export const materialsData = {
-  criticalRawMaterials: [
-    { name: "Nickel", percentage: 33 },
-    { name: "Cobalt", percentage: 10 },
-    { name: "Lithium", percentage: 7 },
-    { name: "Manganese", percentage: 10 },
-  ],
-  recycledContent: [
-    { material: "Nickel", share: 12 },
-    { material: "Cobalt", share: 20 },
-    { material: "Lithium", share: 8 },
-    { material: "Lead", share: 85 },
-  ],
-  hazardousSubstances: [
-    { substance: "Electrolyte (LiPF6)", casNumber: "21324-40-3", concentration: "12%", classification: "Acute Tox. 3" },
-    { substance: "Nickel compounds", casNumber: "Various", concentration: "33%", classification: "Carc. 1A" },
-    { substance: "Cobalt compounds", casNumber: "Various", concentration: "10%", classification: "Carc. 1B" },
-  ],
-  renewableContentShare: 14,
+// ── Tab 2: Symbols, Labels and Documentation of Conformity ──
+export const symbolsAndLabels = {
+  separateCollectionSymbol: "https://europa.eu/youreurope/business/images/symbols/WEEE_symbol_without_bar.svg",
+  cadmiumLeadSymbol: "https://cdn-icons-png.flaticon.com/512/1216/1216895.png",
+  carbonFootprintLabel: "https://example.com/assets/labels/cf_label_class_c.png",
+  extinguishingAgent: "Water spray/mist; foam; dry powder (ABC). Avoid direct high-pressure water jet on energized equipment.",
+  labelMeaning: "Symbols indicate separate collection, presence of lead (Pb), and declared carbon footprint class.",
+  euDeclarationOfConformity: "https://example.com/docs/eu_declaration_of_conformity_LA-24V185Ah.pdf",
+  testReports: "https://example.com/docs/test_reports_LA-24V185Ah.pdf",
 };
 
+// ── Tab 3: Battery Carbon Footprint ──────────────────────
 export const carbonFootprintData = {
-  totalCarbonFootprint: 3250,
-  unit: "kg CO₂e",
-  performanceClass: "B",
-  breakdown: [
-    { stage: "Raw Material", value: 1300, fill: "hsl(160, 84%, 39%)" },
-    { stage: "Production", value: 975, fill: "hsl(200, 70%, 50%)" },
-    { stage: "Distribution", value: 325, fill: "hsl(40, 90%, 55%)" },
-    { stage: "Recycling", value: 650, fill: "hsl(280, 50%, 55%)" },
+  totalPerFunctionalUnit: 45, // kgCO2eq/kWh — Histogram 1
+  unit: "kgCO₂eq/kWh",
+  performanceClass: "C",
+  studyLink: "https://example.com/docs/public_cf_study_LA-24V185Ah.pdf",
+  // Pie Chart 3
+  lifecycleBreakdown: [
+    { stage: "Raw Material Acquisition", value: 50, fill: "hsl(160, 84%, 39%)" },
+    { stage: "Main Product Production", value: 35, fill: "hsl(200, 70%, 50%)" },
+    { stage: "Distribution", value: 5, fill: "hsl(40, 90%, 55%)" },
+    { stage: "End of Life & Recycling", value: 10, fill: "hsl(280, 50%, 55%)" },
   ],
-  studyReference: "ISO 14067:2018 — Carbon Footprint Study, TÜV SÜD Report #CF-2024-042",
 };
 
+// ── Tab 4: Supply Chain Due Diligence ────────────────────
 export const supplyChainData = {
-  manufacturer: {
-    name: "CellZone Battery GmbH",
-    address: "Musterstraße 12, 80331 München, Germany",
-    contact: "+49 89 123 456 78",
-    email: "info@cellzone-battery.eu",
-    website: "www.cellzone-battery.eu",
-  },
-  dueDiligenceStatus: "Compliant",
-  dueDiligenceReport: "OECD Due Diligence Guidance — Report dated 2024-02-28",
-  certifications: [
-    { name: "ISO 9001:2015", status: "Valid", expiry: "2026-01-15" },
-    { name: "ISO 14001:2015", status: "Valid", expiry: "2025-11-30" },
-    { name: "IATF 16949:2016", status: "Valid", expiry: "2025-08-20" },
-    { name: "REACH Compliance", status: "Compliant", expiry: "N/A" },
-  ],
-  euRegulationCompliance: [
-    { regulation: "EU Battery Regulation 2023/1542", compliant: true },
-    { regulation: "EU Taxonomy Regulation", compliant: true },
-    { regulation: "REACH (EC 1907/2006)", compliant: true },
-    { regulation: "RoHS Directive 2011/65/EU", compliant: true },
-    { regulation: "CBAM Regulation (EU) 2023/956", compliant: true },
-  ],
-  economicOperator: {
-    name: "EuroCell Distribution AG",
-    role: "Importer / Distributor",
-    address: "Industrieweg 5, 1010 Vienna, Austria",
-  },
+  dueDiligenceReport: "https://example.com/docs/due_diligence_report_2025.pdf",
 };
 
-export const endOfLifeData = {
-  collectionInfo: "Return to authorized collection points. Free take-back guaranteed under EU Battery Regulation Art. 49.",
-  dismantlingReference: "Dismantling Manual DM-CZB-2024-042 — available upon request from manufacturer.",
-  recyclingEfficiency: [
-    { material: "Cobalt", rate: 95 },
-    { material: "Nickel", rate: 95 },
-    { material: "Lithium", rate: 80 },
-    { material: "Copper", rate: 98 },
-    { material: "Aluminium", rate: 90 },
-  ],
-  sparePartsAvailability: "Battery Management System (BMS) modules and cell replacements available for 8 years from date of manufacture.",
-  recyclingInstructions: "Battery must be discharged to < 50% SoC before transport. Handle per ADR Class 9 regulations.",
+// ── Tab 5: Battery Materials and Composition ─────────────
+export const materialsData = {
+  // Pie Chart 1 items
+  chemistry: "Lead-acid, flooded (traction); PbO₂ positive / Pb negative; H₂SO₄ electrolyte",
+  criticalRawMaterials: "Lead; antimony; sulfuric acid; polypropylene; copper",
+  materialsUsed: "Positive plate: lead dioxide (PbO₂); Negative plate: sponge lead (Pb); Electrolyte: sulfuric acid (SG ~1.28); Separator: polyethylene; Case/Lid: polypropylene",
+  hazardousSubstances: "Lead and sulfuric acid electrolyte (corrosive); antimony compounds in grids (as applicable).",
+  impactInfo: "Toxicity and corrosion hazards; avoid spills; use PPE; recycle via licensed lead-acid battery recycler; comply with transport & waste regulations.",
 };
+
+// ── Tab 6: Circularity and Resource Efficiency ───────────
+export const circularityInfo = {
+  dismantlingManual: "https://example.com/docs/dismantling_manual_LA-24V185Ah.pdf",
+  partNumbers: "https://example.com/docs/parts_list_LA-24V185Ah.html",
+  sparePartsInfo: "Spare parts available via authorized service partners; see parts portal: https://example.com/spares",
+  safetyMeasures: "https://example.com/docs/safety_measures_LA-24V185Ah.pdf",
+};
+
+// Pie Chart 2
+export const recycledContent = {
+  preConsumer: [
+    { material: "Nickel", share: 0 },
+    { material: "Cobalt", share: 0 },
+    { material: "Lithium", share: 0 },
+  ],
+  postConsumer: [
+    { material: "Nickel", share: 0 },
+    { material: "Cobalt", share: 0 },
+    { material: "Lithium", share: 0 },
+  ],
+  recycledLead: 60, // %
+  renewableContent: 20, // %
+};
+
+export const endOfLifeLinks = {
+  wastePrevention: "https://example.com/docs/end_user_waste_prevention.pdf",
+  separateCollection: "https://example.com/docs/end_user_separate_collection.pdf",
+  collectionSecondLifeEol: "https://example.com/docs/collection_second_life_eol_treatment.pdf",
+};
+
+// ── Tab 7: Performance and Durability ────────────────────
+export const capacityEnergyVoltage = {
+  ratedCapacity: 185, // Ah
+  capacityFade: 4, // % — Line Chart 1
+  stateOfCharge: 80, // % — Time Series 1
+  minVoltage: 20.4, // V
+  maxVoltage: 31.8, // V
+  nominalVoltage: 24, // V
+};
+
+export const powerCapability = {
+  originalPower: 5000, // W
+  powerFade: 5, // % — Line Chart 1
+  maxPermittedPower: 8000, // W
+};
+
+export const roundTripEfficiency = {
+  initial: 80, // %
+  at50PercentCycleLife: 78, // %
+  fade: 2, // % — Line Chart 1
+};
+
+export const internalResistance = {
+  initial: 0, // Ohm (pack-level)
+  increase: 15, // %
+};
+
+export const batteryLifetime = {
+  calendarYears: 6,
+  expectedCycles: 1200,
+  actualCycles: 450, // Time Series 1
+  cycleLifeRefTest: "Flooded lead-acid cycling at 25°C; EoL at 80% capacity; ref: up to 1200 cycles @ 50% DoD; up to 900 cycles @ 80% DoD",
+  cRate: 0.2, // A/Ah
+};
+
+export const temperatureConditions = {
+  operatingTemp: 25, // °C
+  idleLowerBoundary: -20, // °C
+  idleUpperBoundary: 40, // °C
+  // Histogram 2
+  extremeTemps: [
+    { label: "Above upper boundary", minutes: 10 },
+    { label: "Below lower boundary", minutes: 5 },
+    { label: "Charging above upper", minutes: 0 },
+    { label: "Charging below lower", minutes: 0 },
+  ],
+};
+
+// ── Chart data generators ────────────────────────────────
+
+// Line Chart 1: Fade curves (capacity fade, power fade, RTE fade over time)
+export const fadeChartData = [
+  { month: 0, capacityFade: 0, powerFade: 0, rteFade: 0 },
+  { month: 6, capacityFade: 0.5, powerFade: 0.6, rteFade: 0.2 },
+  { month: 12, capacityFade: 1.0, powerFade: 1.2, rteFade: 0.5 },
+  { month: 18, capacityFade: 1.5, powerFade: 1.8, rteFade: 0.8 },
+  { month: 24, capacityFade: 2.0, powerFade: 2.5, rteFade: 1.0 },
+  { month: 30, capacityFade: 2.5, powerFade: 3.0, rteFade: 1.2 },
+  { month: 36, capacityFade: 3.0, powerFade: 3.8, rteFade: 1.5 },
+  { month: 42, capacityFade: 3.5, powerFade: 4.3, rteFade: 1.8 },
+  { month: 48, capacityFade: 4.0, powerFade: 5.0, rteFade: 2.0 },
+];
+
+// Time Series 1: SoC and cycle count snapshots
+export const timeSeriesData = [
+  { date: "2025-11", soc: 100, cycles: 0 },
+  { date: "2025-12", soc: 85, cycles: 50 },
+  { date: "2026-01", soc: 78, cycles: 120 },
+  { date: "2026-02", soc: 80, cycles: 200 },
+  { date: "2026-03", soc: 82, cycles: 280 },
+  { date: "2026-04", soc: 75, cycles: 350 },
+  { date: "2026-05", soc: 80, cycles: 450 },
+];
