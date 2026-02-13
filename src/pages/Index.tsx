@@ -17,7 +17,7 @@ const Index = () => {
       <main className="mx-auto max-w-6xl px-4 py-6">
         <IdentityCard />
         <Tabs defaultValue="identifiers" className="w-full">
-          <TabsList className="mb-6 flex h-auto flex-wrap justify-start gap-1 bg-transparent p-0">
+          <TabsList className="mb-6 flex h-auto flex-wrap justify-start gap-1 bg-transparent p-0 overflow-x-auto">
             {[
               { value: "identifiers", label: "Identifiers & Product Data" },
               { value: "symbols", label: "Symbols & Labels" },

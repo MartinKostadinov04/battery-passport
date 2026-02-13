@@ -16,7 +16,7 @@ const MaterialsTab = () => {
       {/* Pie Chart 1 context — textual composition data */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Battery Chemistry & Composition (Pie Chart 1)</CardTitle>
+          <CardTitle className="text-base">Battery Chemistry & Composition</CardTitle>
         </CardHeader>
         <CardContent>
           <InfoBlock label="Battery Chemistry" value={m.chemistry} />

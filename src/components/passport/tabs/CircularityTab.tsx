@@ -1,8 +1,19 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { circularityInfo, recycledContent, endOfLifeLinks } from "@/data/batteryData";
 import { ChartContainer } from "@/components/ui/chart";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
 import { Recycle, BookOpen, Wrench, ExternalLink, FileText } from "lucide-react";
+
+const COLORS = [
+  "hsl(var(--chart-1))",
+  "hsl(var(--chart-2))",
+  "hsl(var(--chart-3))",
+  "hsl(var(--chart-4))",
+  "hsl(var(--chart-5))",
+  "hsl(200, 70%, 50%)",
+  "hsl(280, 50%, 55%)",
+  "hsl(160, 60%, 45%)",
+];
 
 const LinkCard = ({ icon: Icon, title, url }: { icon: React.ElementType; title: string; url: string }) => (
   <Card>
@@ -53,18 +64,33 @@ const CircularityTab = () => {
       <Card>
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-base">
-            <Recycle className="h-4 w-4 text-primary" /> Recycled & Renewable Content (Pie Chart 2)
+            <Recycle className="h-4 w-4 text-primary" /> Recycled & Renewable Content
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <ChartContainer config={{ share: { label: "Share %", color: "hsl(var(--primary))" } }} className="h-[280px]">
-            <BarChart data={recycledData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-              <XAxis dataKey="material" tick={{ fontSize: 10 }} angle={-30} textAnchor="end" height={80} />
-              <YAxis tick={{ fontSize: 12 }} />
+        <CardContent className="flex items-center justify-center">
+          <ChartContainer
+            config={Object.fromEntries(recycledData.map((d) => [d.material, { label: d.material, color: "hsl(var(--primary))" }]))}
+            className="h-[320px] w-full max-w-lg"
+          >
+            <PieChart>
+              <Pie
+                data={recycledData}
+                dataKey="share"
+                nameKey="material"
+                cx="50%"
+                cy="50%"
+                innerRadius={60}
+                outerRadius={100}
+                paddingAngle={2}
+                label={({ material, share }) => `${material}: ${share}%`}
+              >
+                {recycledData.map((entry, i) => (
+                  <Cell key={entry.material} fill={COLORS[i % COLORS.length]} />
+                ))}
+              </Pie>
               <Tooltip formatter={(value: number) => `${value}%`} />
-              <Bar dataKey="share" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
-            </BarChart>
+              <Legend />
+            </PieChart>
           </ChartContainer>
         </CardContent>
       </Card>
