@@ -4,7 +4,7 @@ import { identifiers, productData, dppInfo } from "@/data/batteryData";
 const InfoRow = ({ label, value }: { label: string; value: string | number }) => (
   <div className="flex justify-between border-b border-dashed py-2.5 last:border-0">
     <span className="text-sm text-muted-foreground">{label}</span>
-    <span className="text-sm font-medium text-right max-w-[60%]">{value}</span>
+    <span className="text-sm font-medium text-right max-w-[60%] break-words">{value}</span>
   </div>
 );
 
