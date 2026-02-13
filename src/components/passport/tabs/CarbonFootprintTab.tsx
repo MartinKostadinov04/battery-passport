@@ -48,7 +48,7 @@ const CarbonFootprintTab = () => {
       {/* Pie Chart 3: Lifecycle breakdown */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Lifecycle Stage Contribution (Pie Chart 3)</CardTitle>
+          <CardTitle className="text-base">Lifecycle Stage Contribution</CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-center">
           <ChartContainer
@@ -81,7 +81,7 @@ const CarbonFootprintTab = () => {
       {/* Histogram 1 */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Carbon Footprint per Functional Unit (Histogram 1)</CardTitle>
+          <CardTitle className="text-base">Carbon Footprint per Functional Unit</CardTitle>
         </CardHeader>
         <CardContent>
           <ChartContainer config={{ value: { label: c.unit, color: "hsl(var(--primary))" } }} className="h-[200px]">

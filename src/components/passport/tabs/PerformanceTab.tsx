@@ -46,7 +46,7 @@ const PerformanceTab = () => {
   return (
     <div className="space-y-6">
       {/* Gauges */}
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
         <GaugeCard label="State of Charge" value={cev.stateOfCharge} unit="%" max={100} />
         <GaugeCard label="Initial Round-trip Eff." value={rte.initial} unit="%" max={100} />
         <Card>
@@ -95,7 +95,7 @@ const PerformanceTab = () => {
       {/* Line Chart 1: Fade curves */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Fade Over Time (Line Chart 1)</CardTitle>
+          <CardTitle className="text-base">Fade Over Time</CardTitle>
         </CardHeader>
         <CardContent>
           <ChartContainer
@@ -104,7 +104,7 @@ const PerformanceTab = () => {
               powerFade: { label: "Power Fade %", color: "hsl(200, 70%, 50%)" },
               rteFade: { label: "RTE Fade %", color: "hsl(280, 50%, 55%)" },
             }}
-            className="h-[280px]"
+            className="h-[280px] w-full overflow-x-auto"
           >
             <LineChart data={fadeChartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -122,7 +122,7 @@ const PerformanceTab = () => {
       {/* Time Series 1: SoC and Cycles */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">SoC & Cycles Over Time (Time Series 1)</CardTitle>
+          <CardTitle className="text-base">SoC & Cycles Over Time</CardTitle>
         </CardHeader>
         <CardContent>
           <ChartContainer
@@ -130,7 +130,7 @@ const PerformanceTab = () => {
               soc: { label: "SoC %", color: "hsl(var(--primary))" },
               cycles: { label: "Cycles", color: "hsl(40, 90%, 55%)" },
             }}
-            className="h-[280px]"
+            className="h-[280px] w-full overflow-x-auto"
           >
             <LineChart data={timeSeriesData}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
@@ -172,7 +172,7 @@ const PerformanceTab = () => {
       {/* Histogram 2: Temperature */}
       <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="text-base">Temperature Conditions (Histogram 2)</CardTitle>
+          <CardTitle className="text-base">Temperature Conditions</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4 sm:grid-cols-3 mb-4">
@@ -189,7 +189,7 @@ const PerformanceTab = () => {
               <p className="text-lg font-bold">{tc.idleUpperBoundary}°C</p>
             </div>
           </div>
-          <ChartContainer config={{ minutes: { label: "Minutes", color: "hsl(var(--primary))" } }} className="h-[220px]">
+          <ChartContainer config={{ minutes: { label: "Minutes", color: "hsl(var(--primary))" } }} className="h-[220px] w-full overflow-x-auto">
             <BarChart data={tc.extremeTemps}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis dataKey="label" tick={{ fontSize: 10 }} angle={-15} textAnchor="end" height={60} />
