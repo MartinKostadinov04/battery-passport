@@ -40,7 +40,7 @@ const CircularityTab = () => {
     ...r.postConsumer.map((m) => ({ material: `Post-C ${m.material}`, share: m.share })),
     { material: "Recycled Lead", share: r.recycledLead },
     { material: "Renewable Content", share: r.renewableContent },
-  ];
+  ].filter((d) => d.share > 0);
 
   return (
     <div className="space-y-6">
