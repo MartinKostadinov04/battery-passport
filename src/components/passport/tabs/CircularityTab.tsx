@@ -16,13 +16,13 @@ const COLORS = [
 ];
 
 const LinkCard = ({ icon: Icon, title, url }: { icon: React.ElementType; title: string; url: string }) => (
-  <Card>
+  <Card className="overflow-hidden">
     <CardContent className="flex items-start gap-3 p-4">
       <Icon className="h-4 w-4 mt-0.5 text-primary shrink-0" />
-      <div className="min-w-0">
+      <div className="min-w-0 overflow-hidden">
         <p className="text-sm font-medium">{title}</p>
-        <a href={url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1 truncate">
-          {url} <ExternalLink className="h-3 w-3 shrink-0" />
+        <a href={url} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline flex items-center gap-1 break-all">
+          <span className="truncate">{url}</span> <ExternalLink className="h-3 w-3 shrink-0" />
         </a>
       </div>
     </CardContent>
