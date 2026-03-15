@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useParams, useSearchParams } from "react-router-dom";
+import { usePassportData } from "@/hooks/usePassportData";
 import Header from "@/components/passport/Header";
 import IdentityCard from "@/components/passport/IdentityCard";
 import Footer from "@/components/passport/Footer";
@@ -9,13 +12,50 @@ import SupplyChainTab from "@/components/passport/tabs/SupplyChainTab";
 import MaterialsTab from "@/components/passport/tabs/MaterialsTab";
 import CircularityTab from "@/components/passport/tabs/CircularityTab";
 import PerformanceTab from "@/components/passport/tabs/PerformanceTab";
+import { Loader2 } from "lucide-react";
 
 const Index = () => {
+  const { id } = useParams<{ id: string }>();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const visibility = searchParams.get("visibility") ?? "internal";
+  const setVisibility = (v: string) => setSearchParams({ visibility: v });
+  const { data, isLoading, error } = usePassportData(id, visibility);
+
+  useEffect(() => {
+    const name = data?.general.identifiers.batteryId ?? id ?? "Battery Passport";
+    document.title = `${name} | Battery Passport`;
+    return () => { document.title = "Battery Passport"; };
+  }, [data, id]);
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-3">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="text-sm text-muted-foreground">Loading battery passport…</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !data) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="max-w-md text-center space-y-2">
+          <p className="text-lg font-semibold text-destructive">Failed to load passport</p>
+          <p className="text-sm text-muted-foreground">
+            {error instanceof Error ? error.message : "Passport data could not be retrieved."}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-background">
-      <Header />
+      <Header data={data.general.dppInfo} visibility={visibility} onVisibilityChange={setVisibility} />
       <main className="mx-auto max-w-6xl px-4 py-6">
-        <IdentityCard />
+        <IdentityCard data={data.general} />
         <Tabs defaultValue="identifiers" className="w-full">
           <TabsList className="mb-6 flex h-auto flex-wrap justify-start gap-1 bg-transparent p-0 overflow-x-auto">
             {[
@@ -37,13 +77,13 @@ const Index = () => {
             ))}
           </TabsList>
 
-          <TabsContent value="identifiers"><GeneralInfoTab /></TabsContent>
-          <TabsContent value="symbols"><SymbolsLabelsTab /></TabsContent>
-          <TabsContent value="carbon"><CarbonFootprintTab /></TabsContent>
-          <TabsContent value="supply"><SupplyChainTab /></TabsContent>
-          <TabsContent value="materials"><MaterialsTab /></TabsContent>
-          <TabsContent value="circularity"><CircularityTab /></TabsContent>
-          <TabsContent value="performance"><PerformanceTab /></TabsContent>
+          <TabsContent value="identifiers"><GeneralInfoTab data={data.general} /></TabsContent>
+          <TabsContent value="symbols"><SymbolsLabelsTab data={data.symbols} /></TabsContent>
+          <TabsContent value="carbon"><CarbonFootprintTab data={data.carbon} /></TabsContent>
+          <TabsContent value="supply"><SupplyChainTab data={data.supplyChain} /></TabsContent>
+          <TabsContent value="materials"><MaterialsTab data={data.materials} /></TabsContent>
+          <TabsContent value="circularity"><CircularityTab data={data.circularity} /></TabsContent>
+          <TabsContent value="performance"><PerformanceTab data={data.performance} /></TabsContent>
         </Tabs>
       </main>
       <Footer />
