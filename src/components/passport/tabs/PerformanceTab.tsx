@@ -3,54 +3,8 @@ import type { PerformanceData } from "@/types/passport";
 import { ChartContainer } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
 import { AlertTriangle, Download } from "lucide-react";
-
-const InfoRow = ({ label, value }: { label: string; value: string | number | null }) => {
-  if (value === null) return null;
-  return (
-    <div className="flex justify-between border-b border-dashed py-2.5 last:border-0">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium">{value !== "" && value != null ? value : "–"}</span>
-    </div>
-  );
-};
-
-const InfoBlock = ({ label, value }: { label: string; value: string | null }) => {
-  if (value === null) return null;
-  return (
-    <div className="border-b border-dashed py-3 last:border-0">
-      <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">{label}</p>
-      <p className="text-sm whitespace-pre-line">{value || "–"}</p>
-    </div>
-  );
-};
-
-const GaugeCard = ({ label, value, unit, max }: { label: string; value: number; unit: string; max: number }) => {
-  const pct = max > 0 ? (value / max) * 100 : 0;
-  return (
-    <Card>
-      <CardContent className="flex flex-col items-center p-6">
-        <p className="mb-3 text-sm text-muted-foreground">{label}</p>
-        <div className="relative h-24 w-24">
-          <svg viewBox="0 0 100 100" className="h-full w-full -rotate-90">
-            <circle cx="50" cy="50" r="42" fill="none" stroke="hsl(var(--muted))" strokeWidth="8" />
-            <circle cx="50" cy="50" r="42" fill="none" stroke="hsl(var(--primary))" strokeWidth="8"
-              strokeDasharray={`${pct * 2.64} 264`} strokeLinecap="round" />
-          </svg>
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-lg font-bold">{value}{unit}</span>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-};
-
-const StatBox = ({ label, value }: { label: string; value: string }) => (
-  <div className="flex flex-col items-center justify-center text-center rounded-lg border bg-muted/30 p-4">
-    <p className="text-xs text-muted-foreground mb-1">{label}</p>
-    <p className="text-lg font-bold">{value}</p>
-  </div>
-);
+import { InfoRow, InfoBlock, GaugeCard, StatBox } from "@/components/passport/primitives";
+import { passportTheme } from "@/components/passport/passportTheme";
 
 interface PerformanceTabProps {
   data: PerformanceData;
@@ -188,11 +142,11 @@ const PerformanceTab = ({ data }: PerformanceTabProps) => {
               <p className="text-xs uppercase tracking-wide text-muted-foreground mb-3">Time Spent in Extreme Temperatures (minutes)</p>
               <ChartContainer config={{ minutes: { label: "Minutes", color: "hsl(var(--primary))" } }} className="h-[220px] w-full overflow-x-auto">
                 <BarChart data={extremeTemps}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <CartesianGrid strokeDasharray="3 3" stroke={passportTheme.gridStroke} />
                   <XAxis dataKey="label" tick={{ fontSize: 10 }} angle={-15} textAnchor="end" height={60} />
                   <YAxis tick={{ fontSize: 12 }} />
                   <Tooltip />
-                  <Bar dataKey="minutes" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="minutes" fill={passportTheme.primaryFill} radius={passportTheme.barChart.radius} />
                 </BarChart>
               </ChartContainer>
             </div>

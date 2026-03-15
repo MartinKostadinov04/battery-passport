@@ -1,71 +1,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { CircularityData, FileValue } from "@/types/passport";
+import type { CircularityData } from "@/types/passport";
 import { ChartContainer } from "@/components/ui/chart";
 import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
-import { Recycle, BookOpen, Wrench, Download, FileText } from "lucide-react";
-
-const COLORS = [
-  "hsl(var(--chart-1))",
-  "hsl(var(--chart-2))",
-  "hsl(var(--chart-3))",
-  "hsl(var(--chart-4))",
-  "hsl(var(--chart-5))",
-  "hsl(200, 70%, 50%)",
-  "hsl(280, 50%, 55%)",
-  "hsl(160, 60%, 45%)",
-];
-
-const FileLinkCard = ({ icon: Icon, title, file }: { icon: React.ElementType; title: string; file: FileValue | null }) => (
-  <Card className="overflow-hidden">
-    <CardContent className="flex items-center justify-between gap-4 p-4">
-      <div className="flex items-start gap-3 min-w-0">
-        <Icon className="h-5 w-5 mt-0.5 text-primary shrink-0" />
-        <div>
-          <p className="text-sm font-medium">{title}</p>
-          {file
-            ? <p className="text-xs text-muted-foreground mt-0.5">{file.filename}</p>
-            : <p className="text-xs text-muted-foreground italic mt-0.5">Not provided</p>
-          }
-        </div>
-      </div>
-      {file && (
-        <a
-          href={file.link}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1.5 shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/5 transition-colors"
-        >
-          <Download className="h-3.5 w-3.5" /> Download
-        </a>
-      )}
-    </CardContent>
-  </Card>
-);
-
-const FileRow = ({ icon: Icon, label, file }: { icon: React.ElementType; label: string; file: FileValue | null }) => (
-  <div className="flex items-center justify-between gap-4 border-b border-dashed py-4 last:border-0">
-    <div className="flex items-start gap-3 min-w-0">
-      <Icon className="h-5 w-5 mt-0.5 text-primary shrink-0" />
-      <div>
-        <p className="text-sm font-medium">{label}</p>
-        {file
-          ? <p className="text-xs text-muted-foreground mt-0.5">{file.filename}</p>
-          : <p className="text-xs text-muted-foreground italic mt-0.5">Not provided</p>
-        }
-      </div>
-    </div>
-    {file && (
-      <a
-        href={file.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-1.5 shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/5 transition-colors"
-      >
-        <Download className="h-3.5 w-3.5" /> Download
-      </a>
-    )}
-  </div>
-);
+import { Recycle, BookOpen, Wrench, FileText } from "lucide-react";
+import { FileLinkCard, FileRow } from "@/components/passport/primitives";
+import { passportTheme } from "@/components/passport/passportTheme";
 
 interface CircularityTabProps {
   data: CircularityData;
@@ -144,13 +83,13 @@ const CircularityTab = ({ data }: CircularityTabProps) => {
                     nameKey="material"
                     cx="50%"
                     cy="50%"
-                    innerRadius={60}
-                    outerRadius={100}
-                    paddingAngle={2}
+                    innerRadius={passportTheme.smallPieChart.innerRadius}
+                    outerRadius={passportTheme.smallPieChart.outerRadius}
+                    paddingAngle={passportTheme.smallPieChart.paddingAngle}
                     label={({ material, share }) => `${material}: ${share}%`}
                   >
                     {recycledData.map((entry, i) => (
-                      <Cell key={entry.material} fill={COLORS[i % COLORS.length]} />
+                      <Cell key={entry.material} fill={passportTheme.recycledContentColors[i % passportTheme.recycledContentColors.length]} />
                     ))}
                   </Pie>
                   <Tooltip formatter={(value: number) => `${value}%`} />
@@ -186,9 +125,9 @@ const CircularityTab = ({ data }: CircularityTabProps) => {
           <CardTitle className="text-base">End-of-Life Information</CardTitle>
         </CardHeader>
         <CardContent>
-          <FileRow icon={FileText} label="Waste Prevention Guide" file={eol.wastePrevention} />
-          <FileRow icon={Recycle} label="Separate Collection Guide" file={eol.separateCollection} />
-          <FileRow icon={Recycle} label="Collection, Second Life & EOL Treatment" file={eol.collectionSecondLifeEol} />
+          <FileRow icon={FileText} title="Waste Prevention Guide" file={eol.wastePrevention} />
+          <FileRow icon={Recycle} title="Separate Collection Guide" file={eol.separateCollection} />
+          <FileRow icon={Recycle} title="Collection, Second Life & EOL Treatment" file={eol.collectionSecondLifeEol} />
         </CardContent>
       </Card>
     </div>

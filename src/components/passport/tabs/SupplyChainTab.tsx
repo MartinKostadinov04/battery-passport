@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { SupplyChainData } from "@/types/passport";
-import { FileText, Download, ShieldCheck, BarChart3 } from "lucide-react";
+import { FileText, ShieldCheck, BarChart3 } from "lucide-react";
+import { FileInlineLink } from "@/components/passport/primitives";
 
 interface SupplyChainTabProps {
   data: SupplyChainData;
@@ -19,18 +20,7 @@ const SupplyChainTab = ({ data }: SupplyChainTabProps) => {
           <p className="text-sm text-muted-foreground mb-3">
             Report on the supply chain due diligence policy, risk management plan, and summary of third-party verification.
           </p>
-          {data.dueDiligenceReport ? (
-            <a
-              href={data.dueDiligenceReport.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/5 transition-colors"
-            >
-              <Download className="h-3.5 w-3.5" /> {data.dueDiligenceReport.filename}
-            </a>
-          ) : (
-            <p className="text-xs text-muted-foreground italic">Not provided</p>
-          )}
+          <FileInlineLink file={data.dueDiligenceReport} label={data.dueDiligenceReport?.filename} />
         </CardContent>
       </Card>
 

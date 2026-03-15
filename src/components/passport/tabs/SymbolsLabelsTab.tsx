@@ -1,55 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { SymbolsLabelsData, FileValue } from "@/types/passport";
-import { FileText, Shield, Flame, Download, AlertCircle, ImageOff } from "lucide-react";
-import { useState } from "react";
-
-// <img> sub-resource fetches ignore Content-Disposition: attachment (no download dialog).
-// If S3 serves the SVG with an incorrect content-type, the browser will fire onError —
-// in that case we show a labelled placeholder so the UI stays informative.
-const SymbolImage = ({ file, alt }: { file: FileValue; alt: string }) => {
-  const [failed, setFailed] = useState(false);
-
-  if (failed) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-1 h-12 w-12">
-        <ImageOff className="h-6 w-6 text-muted-foreground/50" />
-        <span className="text-[9px] text-center text-muted-foreground leading-tight">{alt}</span>
-      </div>
-    );
-  }
-
-  return (
-    <img
-      src={file.link}
-      alt={alt}
-      className="h-12 w-12 object-contain"
-      onError={() => setFailed(true)}
-    />
-  );
-};
-
-const FileLink = ({ label, file, icon: Icon }: { label: string; file: FileValue | null; icon: React.ElementType }) => {
-  if (!file) return null;
-  return (
-    <div className="flex items-center justify-between gap-4 border-b border-dashed py-4 last:border-0">
-      <div className="flex items-start gap-3 min-w-0">
-        <Icon className="h-5 w-5 mt-0.5 text-primary shrink-0" />
-        <div>
-          <p className="text-sm font-medium">{label}</p>
-          <p className="text-xs text-muted-foreground mt-0.5">{file.filename}</p>
-        </div>
-      </div>
-      <a
-        href={file.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center gap-1.5 shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/5 transition-colors"
-      >
-        <Download className="h-3.5 w-3.5" /> Download
-      </a>
-    </div>
-  );
-};
+import type { SymbolsLabelsData } from "@/types/passport";
+import { FileText, Shield, Flame, AlertCircle, ImageOff } from "lucide-react";
+import { SymbolImage, FileInlineLink } from "@/components/passport/primitives";
 
 interface SymbolsLabelsTabProps {
   data: SymbolsLabelsData;
@@ -130,44 +82,18 @@ const SymbolsLabelsTab = ({ data }: SymbolsLabelsTabProps) => {
               <Shield className="h-5 w-5 text-primary shrink-0" />
               <div>
                 <p className="text-sm font-medium">EU Declaration of Conformity</p>
-                {data.euDeclarationOfConformity
-                  ? <p className="text-xs text-muted-foreground">{data.euDeclarationOfConformity.filename}</p>
-                  : <p className="text-xs text-muted-foreground italic">Not provided</p>
-                }
               </div>
             </div>
-            {data.euDeclarationOfConformity && (
-              <a
-                href={data.euDeclarationOfConformity.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/5 transition-colors"
-              >
-                <Download className="h-3.5 w-3.5" /> Download
-              </a>
-            )}
+            <FileInlineLink file={data.euDeclarationOfConformity} />
           </div>
           <div className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0">
             <div className="flex items-center gap-3">
               <FileText className="h-5 w-5 text-primary shrink-0" />
               <div>
                 <p className="text-sm font-medium">Test Reports Proving Compliance</p>
-                {data.testReports
-                  ? <p className="text-xs text-muted-foreground">{data.testReports.filename}</p>
-                  : <p className="text-xs text-muted-foreground italic">Not provided</p>
-                }
               </div>
             </div>
-            {data.testReports && (
-              <a
-                href={data.testReports.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/5 transition-colors"
-              >
-                <Download className="h-3.5 w-3.5" /> Download
-              </a>
-            )}
+            <FileInlineLink file={data.testReports} />
           </div>
         </CardContent>
       </Card>

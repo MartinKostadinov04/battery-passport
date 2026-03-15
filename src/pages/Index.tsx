@@ -13,6 +13,7 @@ import MaterialsTab from "@/components/passport/tabs/MaterialsTab";
 import CircularityTab from "@/components/passport/tabs/CircularityTab";
 import PerformanceTab from "@/components/passport/tabs/PerformanceTab";
 import { Loader2 } from "lucide-react";
+import { PASSPORT_TABS } from "@/components/passport/passportConfig";
 
 const Index = () => {
   const { id } = useParams<{ id: string }>();
@@ -58,15 +59,7 @@ const Index = () => {
         <IdentityCard data={data.general} />
         <Tabs defaultValue="identifiers" className="w-full">
           <TabsList className="mb-6 flex h-auto flex-wrap justify-start gap-1 bg-transparent p-0 overflow-x-auto">
-            {[
-              { value: "identifiers", label: "Identifiers & Product Data" },
-              { value: "symbols", label: "Symbols & Labels" },
-              { value: "carbon", label: "Carbon Footprint" },
-              { value: "supply", label: "Supply Chain" },
-              { value: "materials", label: "Materials & Composition" },
-              { value: "circularity", label: "Circularity & Resource Efficiency" },
-              { value: "performance", label: "Performance & Durability" },
-            ].map((tab) => (
+            {PASSPORT_TABS.map((tab) => (
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}

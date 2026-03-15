@@ -1,16 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { MaterialsData } from "@/types/passport";
 import { AlertTriangle } from "lucide-react";
-
-const InfoBlock = ({ label, value }: { label: string; value: string | null }) => {
-  if (value === null) return null;
-  return (
-    <div className="border-b border-dashed py-3 last:border-0">
-      <p className="text-xs uppercase tracking-wide text-muted-foreground mb-1">{label}</p>
-      <p className="text-sm whitespace-pre-line">{value || "–"}</p>
-    </div>
-  );
-};
+import { InfoBlock } from "@/components/passport/primitives";
 
 interface MaterialsTabProps {
   data: MaterialsData;

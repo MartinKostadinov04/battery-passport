@@ -3,17 +3,11 @@ import type { CarbonFootprintData } from "@/types/passport";
 import { ChartContainer } from "@/components/ui/chart";
 import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
 import { FileText, Download } from "lucide-react";
+import { passportTheme } from "@/components/passport/passportTheme";
 
 interface CarbonFootprintTabProps {
   data: CarbonFootprintData;
 }
-
-const LIFECYCLE_COLORS = [
-  "hsl(160, 84%, 39%)",
-  "hsl(200, 70%, 50%)",
-  "hsl(40, 90%, 55%)",
-  "hsl(280, 50%, 55%)",
-];
 
 // Shorter labels to prevent pie chart label clipping
 const LIFECYCLE_STAGES = [
@@ -101,7 +95,7 @@ const CarbonFootprintTab = ({ data }: CarbonFootprintTabProps) => {
           </CardHeader>
           <CardContent className="flex items-center justify-center">
             <ChartContainer
-              config={Object.fromEntries(lifecycleBreakdown.map((b, i) => [b.stage, { label: b.stage, color: LIFECYCLE_COLORS[i] }]))}
+              config={Object.fromEntries(lifecycleBreakdown.map((b, i) => [b.stage, { label: b.stage, color: passportTheme.lifecycleColors[i] }]))}
               className="h-[320px] w-full max-w-lg"
             >
               <PieChart>
@@ -111,13 +105,13 @@ const CarbonFootprintTab = ({ data }: CarbonFootprintTabProps) => {
                   nameKey="stage"
                   cx="50%"
                   cy="50%"
-                  innerRadius={70}
-                  outerRadius={110}
-                  paddingAngle={3}
+                  innerRadius={passportTheme.pieChart.innerRadius}
+                  outerRadius={passportTheme.pieChart.outerRadius}
+                  paddingAngle={passportTheme.pieChart.paddingAngle}
                   label={({ value }) => `${value}%`}
                 >
                   {lifecycleBreakdown.map((entry, i) => (
-                    <Cell key={entry.stage} fill={LIFECYCLE_COLORS[i % LIFECYCLE_COLORS.length]} />
+                    <Cell key={entry.stage} fill={passportTheme.lifecycleColors[i % passportTheme.lifecycleColors.length]} />
                   ))}
                 </Pie>
                 <Tooltip formatter={(value: number) => `${value}%`} />
@@ -141,7 +135,7 @@ const CarbonFootprintTab = ({ data }: CarbonFootprintTabProps) => {
                 <XAxis dataKey="name" tick={{ fontSize: 12 }} />
                 <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip />
-                <Bar dataKey="value" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                <Bar dataKey="value" fill="hsl(var(--primary))" radius={passportTheme.barChart.radius} />
               </BarChart>
             </ChartContainer>
           </CardContent>

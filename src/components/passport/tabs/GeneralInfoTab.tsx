@@ -1,16 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { GeneralInfoData } from "@/types/passport";
 import { formatDate } from "@/utils/formatDate";
-
-const InfoRow = ({ label, value }: { label: string; value: string | null }) => {
-  if (value === null) return null;
-  return (
-    <div className="flex justify-between border-b border-dashed py-2.5 last:border-0">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium text-right max-w-[60%] break-words">{value || "–"}</span>
-    </div>
-  );
-};
+import { InfoRow } from "@/components/passport/primitives";
 
 interface GeneralInfoTabProps {
   data: GeneralInfoData;
