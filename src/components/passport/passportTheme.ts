@@ -4,10 +4,10 @@
 export const passportTheme = {
   // ── Color palettes ────────────────────────────────────────
   lifecycleColors: [
-    "hsl(160, 84%, 39%)",  // Raw Materials
-    "hsl(200, 70%, 50%)",  // Production
-    "hsl(40, 90%, 55%)",   // Distribution
-    "hsl(280, 50%, 55%)",  // End of Life
+    "hsl(var(--chart-lifecycle-1))",  // Raw Materials
+    "hsl(var(--chart-lifecycle-2))",  // Production
+    "hsl(var(--chart-lifecycle-3))",  // Distribution
+    "hsl(var(--chart-lifecycle-4))",  // End of Life
   ],
   recycledContentColors: [
     "hsl(var(--chart-1))",
@@ -15,17 +15,17 @@ export const passportTheme = {
     "hsl(var(--chart-3))",
     "hsl(var(--chart-4))",
     "hsl(var(--chart-5))",
-    "hsl(200, 70%, 50%)",
-    "hsl(280, 50%, 55%)",
-    "hsl(160, 60%, 45%)",
+    "hsl(var(--chart-6))",
+    "hsl(var(--chart-7))",
+    "hsl(var(--chart-8))",
   ],
   // Line chart series colors (fade curves & time series)
   lineColors: {
-    capacityFade: "hsl(160, 84%, 39%)",  // green — capacity
-    powerFade:    "hsl(200, 70%, 50%)",  // blue  — power
-    rteFade:      "hsl(40, 90%, 55%)",   // amber — round-trip efficiency
-    soc:          "hsl(160, 84%, 39%)",  // green — state of charge
-    cycles:       "hsl(280, 50%, 55%)",  // purple — cycle count
+    capacityFade: "hsl(var(--chart-lifecycle-1))",
+    powerFade:    "hsl(var(--chart-lifecycle-2))",
+    rteFade:      "hsl(var(--chart-lifecycle-3))",
+    soc:          "hsl(var(--chart-lifecycle-1))",
+    cycles:       "hsl(var(--chart-lifecycle-4))",
   },
 
   // ── Chart geometry ────────────────────────────────────────

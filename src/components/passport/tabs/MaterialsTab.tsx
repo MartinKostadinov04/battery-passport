@@ -10,15 +10,17 @@ interface MaterialsTabProps {
 const MaterialsTab = ({ data }: MaterialsTabProps) => {
   return (
     <div className="space-y-6">
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">Battery Chemistry & Composition</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <InfoBlock label="Battery Chemistry" value={data.chemistry} />
-          <InfoBlock label="Critical Raw Materials" value={data.criticalRawMaterials} />
-        </CardContent>
-      </Card>
+      {(data.chemistry !== null || data.criticalRawMaterials !== null) && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Battery Chemistry & Composition</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <InfoBlock label="Battery Chemistry" value={data.chemistry} />
+            <InfoBlock label="Critical Raw Materials" value={data.criticalRawMaterials} />
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid gap-6 md:grid-cols-2">
         {data.hazardousSubstances !== null && (

@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { SymbolsLabelsData } from "@/types/passport";
-import { FileText, Shield, Flame, AlertCircle, ImageOff } from "lucide-react";
+import { Shield, AlertCircle, ImageOff } from "lucide-react";
 import { SymbolImage, FileInlineLink } from "@/components/passport/primitives";
 
 interface SymbolsLabelsTabProps {
@@ -9,11 +9,12 @@ interface SymbolsLabelsTabProps {
 
 const SymbolsLabelsTab = ({ data }: SymbolsLabelsTabProps) => {
   const hasSafetyInfo = data.extinguishingAgent !== null || data.labelMeaning !== null;
+  const hasConformityDocs = data.euDeclarationOfConformity !== null || data.testReports !== null;
 
   return (
     <div className="space-y-6">
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Regulatory Symbols */}
+        {/* Regulatory Symbols — always shown, ImageOff for null slots */}
         <Card>
           <CardHeader className="pb-3">
             <CardTitle className="text-base">Regulatory Symbols</CardTitle>
@@ -40,13 +41,11 @@ const SymbolsLabelsTab = ({ data }: SymbolsLabelsTabProps) => {
           </CardContent>
         </Card>
 
-        {/* Safety Information — only render if at least one field is non-null */}
+        {/* Safety Information */}
         {hasSafetyInfo && (
           <Card>
             <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-base">
-                <Flame className="h-4 w-4 text-primary" /> Safety Information
-              </CardTitle>
+              <CardTitle className="text-base">Safety Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               {data.extinguishingAgent !== null && (
@@ -69,34 +68,34 @@ const SymbolsLabelsTab = ({ data }: SymbolsLabelsTabProps) => {
         )}
       </div>
 
-      {/* Documentation of Conformity */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <FileText className="h-4 w-4 text-primary" /> Documentation of Conformity
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between gap-4 border-b border-dashed py-4 first:pt-0">
-            <div className="flex items-center gap-3">
-              <Shield className="h-5 w-5 text-primary shrink-0" />
-              <div>
-                <p className="text-sm font-medium">EU Declaration of Conformity</p>
+      {/* Documentation of Conformity — hidden if neither file is available */}
+      {hasConformityDocs && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Documentation of Conformity</CardTitle>
+          </CardHeader>
+          <CardContent>
+            {data.euDeclarationOfConformity !== null && (
+              <div className="flex items-center justify-between gap-4 border-b border-dashed py-4 first:pt-0">
+                <div className="flex items-center gap-3">
+                  <Shield className="h-5 w-5 text-primary shrink-0" />
+                  <p className="text-sm font-medium">EU Declaration of Conformity</p>
+                </div>
+                <FileInlineLink file={data.euDeclarationOfConformity} />
               </div>
-            </div>
-            <FileInlineLink file={data.euDeclarationOfConformity} />
-          </div>
-          <div className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0">
-            <div className="flex items-center gap-3">
-              <FileText className="h-5 w-5 text-primary shrink-0" />
-              <div>
-                <p className="text-sm font-medium">Test Reports Proving Compliance</p>
+            )}
+            {data.testReports !== null && (
+              <div className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0">
+                <div className="flex items-center gap-3">
+                  <Shield className="h-5 w-5 text-primary shrink-0" />
+                  <p className="text-sm font-medium">Test Reports Proving Compliance</p>
+                </div>
+                <FileInlineLink file={data.testReports} />
               </div>
-            </div>
-            <FileInlineLink file={data.testReports} />
-          </div>
-        </CardContent>
-      </Card>
+            )}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

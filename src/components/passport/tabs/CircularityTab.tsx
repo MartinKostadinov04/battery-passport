@@ -24,10 +24,14 @@ const CircularityTab = ({ data }: CircularityTabProps) => {
     { material: "Renewable Content", share: parseFloat(r.renewableContent ?? "") || 0 },
   ].filter((d) => d.share > 0);
 
+  const hasCircularityInfo = c.dismantlingManual !== null || c.safetyMeasures !== null || c.partNumbers !== null || c.sparePartsInfo !== null;
+  const hasRecycledContent = Object.values(r).some((v) => v !== null);
+  const hasEolData = eol.wastePrevention !== null || eol.separateCollection !== null || eol.collectionSecondLifeEol !== null;
+
   return (
     <div className="space-y-6">
       {/* Circularity Information */}
-      <Card>
+      {hasCircularityInfo && <Card>
         <CardHeader className="pb-3">
           <CardTitle className="text-base">Circularity Information</CardTitle>
         </CardHeader>
@@ -59,14 +63,12 @@ const CircularityTab = ({ data }: CircularityTabProps) => {
             )}
           </div>
         </CardContent>
-      </Card>
+      </Card>}
 
       {/* Recycled & Renewable Content */}
-      <Card>
+      {hasRecycledContent && <Card>
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Recycle className="h-4 w-4 text-primary" /> Recycled & Renewable Content
-          </CardTitle>
+          <CardTitle className="text-base">Recycled & Renewable Content</CardTitle>
         </CardHeader>
         <CardContent>
           {/* Pie chart — only non-zero values are meaningful to visualise */}
@@ -117,19 +119,21 @@ const CircularityTab = ({ data }: CircularityTabProps) => {
             ))}
           </div>
         </CardContent>
-      </Card>
+      </Card>}
 
       {/* End of Life */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="text-base">End-of-Life Information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <FileRow icon={FileText} title="Waste Prevention Guide" file={eol.wastePrevention} />
-          <FileRow icon={Recycle} title="Separate Collection Guide" file={eol.separateCollection} />
-          <FileRow icon={Recycle} title="Collection, Second Life & EOL Treatment" file={eol.collectionSecondLifeEol} />
-        </CardContent>
-      </Card>
+      {hasEolData && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">End-of-Life Information</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <FileRow icon={FileText} title="Waste Prevention Guide" file={eol.wastePrevention} />
+            <FileRow icon={Recycle} title="Separate Collection Guide" file={eol.separateCollection} />
+            <FileRow icon={Recycle} title="Collection, Second Life & EOL Treatment" file={eol.collectionSecondLifeEol} />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

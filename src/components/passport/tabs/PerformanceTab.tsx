@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import type { PerformanceData } from "@/types/passport";
 import { ChartContainer } from "@/components/ui/chart";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from "recharts";
@@ -48,21 +49,14 @@ const PerformanceTab = ({ data }: PerformanceTabProps) => {
           <GaugeCard label="Initial Round-trip Eff." value={rteValue} unit="%" max={100} />
         )}
         {(pc.originalPower !== null || pc.maxPermittedPower !== null) && (
-          <Card>
-            <CardContent className="flex flex-col items-center justify-center p-6 h-full">
-              <p className="mb-1 text-sm text-muted-foreground">Power Capability</p>
-              <p className="text-2xl font-bold">{pc.originalPower ?? "–"} <span className="text-sm font-normal text-muted-foreground">W</span></p>
-              <p className="text-xs text-muted-foreground mt-1">Max permitted: {pc.maxPermittedPower ?? "–"} W</p>
-            </CardContent>
-          </Card>
+          <StatBox
+            label="Power Capability"
+            value={`${pc.originalPower ?? "–"} W`}
+            subtext={`Max: ${pc.maxPermittedPower ?? "–"} W`}
+          />
         )}
         {cev.ratedCapacity !== null && (
-          <Card>
-            <CardContent className="flex flex-col items-center justify-center p-6 h-full">
-              <p className="mb-1 text-sm text-muted-foreground">Rated Capacity</p>
-              <p className="text-2xl font-bold">{cev.ratedCapacity || "–"} <span className="text-sm font-normal text-muted-foreground">Ah</span></p>
-            </CardContent>
-          </Card>
+          <StatBox label="Rated Capacity" value={`${cev.ratedCapacity || "–"} Ah`} />
         )}
       </div>
 
@@ -73,11 +67,11 @@ const PerformanceTab = ({ data }: PerformanceTabProps) => {
             <CardTitle className="text-base">Capacity, Energy & Voltage</CardTitle>
           </CardHeader>
           <CardContent>
-            <InfoRow label="Nominal Voltage" value={cev.nominalVoltage !== null ? (cev.nominalVoltage ? `${cev.nominalVoltage} V` : "") : null} />
-            <InfoRow label="Min Voltage" value={cev.minVoltage !== null ? (cev.minVoltage ? `${cev.minVoltage} V` : "") : null} />
-            <InfoRow label="Max Voltage" value={cev.maxVoltage !== null ? (cev.maxVoltage ? `${cev.maxVoltage} V` : "") : null} />
-            <InfoRow label="Capacity Fade" value={cev.capacityFade !== null ? (cev.capacityFade ? `${cev.capacityFade}%` : "") : null} />
-            <InfoRow label="Remaining Capacity" value={cev.remainingCapacity !== null ? (cev.remainingCapacity ? `${cev.remainingCapacity} Ah` : "") : null} />
+            <InfoRow label="Nominal Voltage" value={cev.nominalVoltage} unit="V" />
+            <InfoRow label="Min Voltage" value={cev.minVoltage} unit="V" />
+            <InfoRow label="Max Voltage" value={cev.maxVoltage} unit="V" />
+            <InfoRow label="Capacity Fade" value={cev.capacityFade} unit="%" />
+            <InfoRow label="Remaining Capacity" value={cev.remainingCapacity} unit="Ah" />
           </CardContent>
         </Card>
 
@@ -86,14 +80,14 @@ const PerformanceTab = ({ data }: PerformanceTabProps) => {
             <CardTitle className="text-base">Efficiency & Resistance</CardTitle>
           </CardHeader>
           <CardContent>
-            <InfoRow label="RTE at 50% Cycle Life" value={rte.at50PercentCycleLife !== null ? (rte.at50PercentCycleLife ? `${rte.at50PercentCycleLife}%` : "") : null} />
-            <InfoRow label="RTE Fade" value={rte.fade !== null ? (rte.fade ? `${rte.fade}%` : "") : null} />
-            <InfoRow label="Initial Internal Resistance" value={ir.initial !== null ? (ir.initial ? `${ir.initial} Ω` : "") : null} />
-            <InfoRow label="Resistance Increase (Module)" value={ir.increaseModule !== null ? (ir.increaseModule ? `${ir.increaseModule}%` : "") : null} />
-            <InfoRow label="Resistance Increase (Cell)" value={ir.increaseCell !== null ? (ir.increaseCell ? `${ir.increaseCell}%` : "") : null} />
-            <InfoRow label="Power Fade" value={pc.powerFade !== null ? (pc.powerFade ? `${pc.powerFade}%` : "") : null} />
+            <InfoRow label="RTE at 50% Cycle Life" value={rte.at50PercentCycleLife} unit="%" />
+            <InfoRow label="RTE Fade" value={rte.fade} unit="%" />
+            <InfoRow label="Initial Internal Resistance" value={ir.initial} unit="Ω" />
+            <InfoRow label="Resistance Increase (Module)" value={ir.increaseModule} unit="%" />
+            <InfoRow label="Resistance Increase (Cell)" value={ir.increaseCell} unit="%" />
+            <InfoRow label="Power Fade" value={pc.powerFade} unit="%" />
             <InfoRow label="Power / Energy Ratio" value={pc.powerEnergyRatio} />
-            <InfoRow label="Remaining Power" value={pc.remainingPower !== null ? (pc.remainingPower ? `${pc.remainingPower} W` : "") : null} />
+            <InfoRow label="Remaining Power" value={pc.remainingPower} unit="W" />
           </CardContent>
         </Card>
       </div>
@@ -105,10 +99,10 @@ const PerformanceTab = ({ data }: PerformanceTabProps) => {
             <CardTitle className="text-base">Battery Lifetime</CardTitle>
           </CardHeader>
           <CardContent>
-            <InfoRow label="Expected Lifetime" value={bl.calendarYears !== null ? (bl.calendarYears ? `${bl.calendarYears} years` : "") : null} />
+            <InfoRow label="Expected Lifetime" value={bl.calendarYears} unit="years" />
             <InfoRow label="Expected Cycles" value={bl.expectedCycles} />
             <InfoRow label="Actual Cycles" value={bl.actualCycles} />
-            <InfoRow label="C-rate" value={bl.cRate !== null ? (bl.cRate ? `${bl.cRate} A/Ah` : "") : null} />
+            <InfoRow label="C-rate" value={bl.cRate} unit="A/Ah" />
           </CardContent>
         </Card>
 
@@ -129,9 +123,7 @@ const PerformanceTab = ({ data }: PerformanceTabProps) => {
         </CardHeader>
         <CardContent>
           {tempStats.length > 0 && (
-            <div className={`grid gap-4 mb-6 grid-cols-${Math.min(tempStats.length, 4)} justify-center`}
-              style={{ gridTemplateColumns: `repeat(${tempStats.length}, minmax(0, 1fr))` }}
-            >
+            <div className="grid gap-4 mb-6 sm:grid-cols-2 lg:grid-cols-4">
               {tempStats.map((s) => (
                 <StatBox key={s.label} label={s.label} value={s.value} />
               ))}
@@ -176,14 +168,11 @@ const PerformanceTab = ({ data }: PerformanceTabProps) => {
               </div>
             </div>
             {ne.accidents && (
-              <a
-                href={ne.accidents.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 shrink-0 rounded-md border px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/5 transition-colors"
-              >
-                <Download className="h-3.5 w-3.5" /> Download
-              </a>
+              <Button variant="outline" size="sm" asChild className="shrink-0">
+                <a href={ne.accidents.link} target="_blank" rel="noopener noreferrer">
+                  <Download className="h-3.5 w-3.5" /> Download
+                </a>
+              </Button>
             )}
           </div>
         </CardContent>

@@ -54,7 +54,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header data={data.general.dppInfo} visibility={visibility} onVisibilityChange={setVisibility} />
+      <Header data={data.general.dppInfo} passportData={data} visibility={visibility} onVisibilityChange={setVisibility} />
       <main className="mx-auto max-w-6xl px-4 py-6">
         <IdentityCard data={data.general} />
         <Tabs defaultValue="identifiers" className="w-full">

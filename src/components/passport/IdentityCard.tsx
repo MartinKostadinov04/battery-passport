@@ -3,20 +3,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import type { GeneralInfoData } from "@/types/passport";
 import { formatDate } from "@/utils/formatDate";
+import { InfoRow } from "@/components/passport/primitives";
 
 interface IdentityCardProps {
   data: GeneralInfoData;
 }
-
-const Row = ({ label, value }: { label: string; value: string | null }) => {
-  if (value === null) return null;
-  return (
-    <div className="flex items-start gap-2">
-      <span className="text-muted-foreground min-w-[140px] shrink-0 text-sm">{label}</span>
-      <span className="text-sm">{value || "–"}</span>
-    </div>
-  );
-};
 
 const IdentityCard = ({ data }: IdentityCardProps) => {
   const { identifiers, productData, dppInfo } = data;
@@ -48,12 +39,12 @@ const IdentityCard = ({ data }: IdentityCardProps) => {
             )}
           </div>
 
-          <div className="grid gap-2">
-            <Row label="Category" value={productData.batteryCategory} />
-            <Row label="Manufacturing Date" value={productData.manufacturingDate === null ? null : formatDate(productData.manufacturingDate)} />
-            <Row label="Manufacturing Place" value={productData.manufacturingPlace} />
-            <Row label="Warranty Until" value={productData.warrantyPeriod === null ? null : formatDate(productData.warrantyPeriod)} />
-            <Row label="Last DPP Update" value={dppInfo.lastUpdated === null ? null : formatDate(dppInfo.lastUpdated)} />
+          <div>
+            <InfoRow label="Category" value={productData.batteryCategory} />
+            <InfoRow label="Manufacturing Date" value={productData.manufacturingDate === null ? null : formatDate(productData.manufacturingDate)} />
+            <InfoRow label="Manufacturing Place" value={productData.manufacturingPlace} />
+            <InfoRow label="Warranty Until" value={productData.warrantyPeriod === null ? null : formatDate(productData.warrantyPeriod)} />
+            <InfoRow label="Last DPP Update" value={dppInfo.lastUpdated === null ? null : formatDate(dppInfo.lastUpdated)} />
           </div>
         </div>
 

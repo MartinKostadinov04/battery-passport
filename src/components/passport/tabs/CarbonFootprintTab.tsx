@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { CarbonFootprintData } from "@/types/passport";
 import { ChartContainer } from "@/components/ui/chart";
-import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, Legend } from "recharts";
+import { Button } from "@/components/ui/button";
 import { FileText, Download } from "lucide-react";
 import { passportTheme } from "@/components/passport/passportTheme";
 
@@ -9,7 +10,6 @@ interface CarbonFootprintTabProps {
   data: CarbonFootprintData;
 }
 
-// Shorter labels to prevent pie chart label clipping
 const LIFECYCLE_STAGES = [
   { key: "rawMaterialContribution" as const, stage: "Raw Materials" },
   { key: "productionContribution" as const, stage: "Production" },
@@ -18,13 +18,9 @@ const LIFECYCLE_STAGES = [
 ];
 
 const CarbonFootprintTab = ({ data }: CarbonFootprintTabProps) => {
-  const totalNum = parseFloat(data.totalPerFunctionalUnit ?? "") || 0;
-
   const lifecycleBreakdown = LIFECYCLE_STAGES
     .map(({ key, stage }) => ({ stage, value: parseFloat(data[key] ?? "") || 0 }))
     .filter((d) => d.value > 0);
-
-  const histogramData = [{ name: "This Battery", value: totalNum }];
 
   return (
     <div className="space-y-6">
@@ -62,30 +58,25 @@ const CarbonFootprintTab = ({ data }: CarbonFootprintTabProps) => {
         )}
       </div>
 
-      {/* Study Link — always shown */}
-      <Card>
-        <CardContent className="flex items-center gap-4 p-4">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
-            <FileText className="h-5 w-5 text-primary" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium">Public Carbon Footprint Study</p>
-            <p className="text-xs text-muted-foreground">Third-party verified lifecycle assessment</p>
-          </div>
-          {data.studyLink ? (
-            <a
-              href={data.studyLink.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-xs font-medium text-primary hover:bg-primary/5 shrink-0"
-            >
-              <Download className="h-3.5 w-3.5" /> {data.studyLink.filename}
-            </a>
-          ) : (
-            <p className="text-xs text-muted-foreground italic shrink-0">Not provided</p>
-          )}
-        </CardContent>
-      </Card>
+      {/* Study Link */}
+      {data.studyLink !== null && (
+        <Card>
+          <CardContent className="flex items-center gap-4 p-4">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+              <FileText className="h-5 w-5 text-primary" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium">Public Carbon Footprint Study</p>
+              <p className="text-xs text-muted-foreground">Third-party verified lifecycle assessment</p>
+            </div>
+            <Button variant="outline" size="sm" asChild className="shrink-0">
+              <a href={data.studyLink.link} target="_blank" rel="noopener noreferrer">
+                <Download className="h-3.5 w-3.5" /> {data.studyLink.filename}
+              </a>
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Pie Chart: Lifecycle breakdown */}
       {lifecycleBreakdown.length > 0 && (
@@ -117,26 +108,6 @@ const CarbonFootprintTab = ({ data }: CarbonFootprintTabProps) => {
                 <Tooltip formatter={(value: number) => `${value}%`} />
                 <Legend />
               </PieChart>
-            </ChartContainer>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Bar chart: CF per Functional Unit */}
-      {data.totalPerFunctionalUnit !== null && totalNum > 0 && (
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Carbon Footprint per Functional Unit</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ChartContainer config={{ value: { label: "kgCO₂eq/kWh", color: "hsl(var(--primary))" } }} className="h-[200px]">
-              <BarChart data={histogramData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-                <YAxis tick={{ fontSize: 12 }} />
-                <Tooltip />
-                <Bar dataKey="value" fill="hsl(var(--primary))" radius={passportTheme.barChart.radius} />
-              </BarChart>
             </ChartContainer>
           </CardContent>
         </Card>
