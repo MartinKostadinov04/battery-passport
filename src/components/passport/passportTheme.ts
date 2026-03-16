@@ -3,11 +3,13 @@
 
 export const passportTheme = {
   // ── Color palettes ────────────────────────────────────────
+  // Both pie charts share the same ramp — lifecycle uses steps 1–4,
+  // recycled content uses all 8. Change --chart-1..8 in index.css to retheme both.
   lifecycleColors: [
-    "hsl(var(--chart-lifecycle-1))",  // Raw Materials
-    "hsl(var(--chart-lifecycle-2))",  // Production
-    "hsl(var(--chart-lifecycle-3))",  // Distribution
-    "hsl(var(--chart-lifecycle-4))",  // End of Life
+    "hsl(var(--chart-1))",
+    "hsl(var(--chart-2))",
+    "hsl(var(--chart-3))",
+    "hsl(var(--chart-4))",
   ],
   recycledContentColors: [
     "hsl(var(--chart-1))",
@@ -19,13 +21,13 @@ export const passportTheme = {
     "hsl(var(--chart-7))",
     "hsl(var(--chart-8))",
   ],
-  // Line chart series colors (fade curves & time series)
+  // Line chart series colors — also drawn from the unified ramp
   lineColors: {
-    capacityFade: "hsl(var(--chart-lifecycle-1))",
-    powerFade:    "hsl(var(--chart-lifecycle-2))",
-    rteFade:      "hsl(var(--chart-lifecycle-3))",
-    soc:          "hsl(var(--chart-lifecycle-1))",
-    cycles:       "hsl(var(--chart-lifecycle-4))",
+    capacityFade: "hsl(var(--chart-1))",
+    powerFade:    "hsl(var(--chart-2))",
+    rteFade:      "hsl(var(--chart-3))",
+    soc:          "hsl(var(--chart-1))",
+    cycles:       "hsl(var(--chart-4))",
   },
 
   // ── Chart geometry ────────────────────────────────────────

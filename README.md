@@ -13,6 +13,7 @@ A production-ready Digital Product Passport (DPP) viewer for batteries, built on
 | Charts | Recharts |
 | Data fetching | TanStack Query (React Query) |
 | Routing | React Router v6 |
+| QR code | react-qr-code |
 
 ---
 
@@ -72,7 +73,12 @@ Every field in `PassportData` is typed `string | null` (or `FileValue | null`):
 | `""` | Returned by the API but has no value | Renders `–` |
 | `"some value"` | Has a real value | Renders the value |
 
-This means visibility filtering is automatic — reduce the visibility level and fields the API stops returning simply disappear from the UI. No hardcoded role checks in components.
+This applies at two levels:
+
+- **Field level** — `InfoRow`, `InfoBlock`, `FileLinkCard`, `FileRow`, `FileInlineLink` all return `null` when their value prop is `null`
+- **Section level** — each card in a tab checks whether any of its fields are non-null before rendering. If all fields in a section are null, the entire card is hidden
+
+This means visibility filtering is fully automatic — reduce the visibility level and both individual fields and entire sections disappear from the UI with no hardcoded role checks anywhere.
 
 ### Visibility Levels
 
@@ -113,7 +119,7 @@ src/
     └── passport/
         ├── passportTheme.ts         ← All visual constants (colors, chart geometry)
         ├── passportConfig.ts        ← Tab definitions (value, label)
-        ├── Header.tsx               Sticky header: logo, visibility selector, status badge
+        ├── Header.tsx               Sticky header: visibility selector, QR dialog (with Synex brand mark), JSON viewer
         ├── IdentityCard.tsx         Battery identity summary card
         ├── Footer.tsx               Page footer
         ├── primitives/              Shared display components (see below)
@@ -136,16 +142,45 @@ src/
 
 ---
 
-## Design Tokens — `passportTheme.ts`
+## Central Design Panel
 
-All chart colors and geometry are defined in one place. Change them here and they propagate to all tabs.
+All visual decisions flow from three files. Change things here and they propagate everywhere.
+
+### `src/index.css` — Colors, typography, spacing
+
+CSS custom properties that Tailwind maps to utility classes. Key entries:
+
+```css
+--primary: 20 90% 48%;          /* brand orange — drives buttons, badges, highlights */
+--muted-foreground: 0 0% 45%;   /* secondary label text */
+
+/* Unified pie chart ramp (warm orange → golden)
+   Lifecycle pie uses steps 1–4. Recycled content uses all 8.
+   Change only these variables to retheme all charts at once. */
+--chart-1: 13 72% 40%;   /* burnt rust     */
+--chart-2: 20 90% 48%;   /* primary orange */
+--chart-3: 38 84% 56%;   /* amber          */
+--chart-4: 48 88% 63%;   /* golden yellow  */
+--chart-5: 30 58% 64%;   /* warm peach     */
+--chart-6: 25 46% 50%;   /* warm brown     */
+--chart-7: 17 76% 52%;   /* mid orange     */
+--chart-8: 45 72% 73%;   /* pale gold      */
+```
+
+Dark mode equivalents are defined in `.dark` in the same file with brightened values.
+
+### `src/components/passport/passportTheme.ts` — Chart tokens
+
+All chart colors and geometry in one place. Change here, propagates to all tabs.
 
 ```ts
 import { passportTheme } from "@/components/passport/passportTheme";
 
-passportTheme.lifecycleColors        // 4 colors for carbon lifecycle pie chart
-passportTheme.recycledContentColors  // 8 colors for recycled content pie chart
-passportTheme.lineColors             // Named colors for line chart series
+// Both pie charts share the same ramp — lifecycle uses steps 1–4,
+// recycled content uses all 8. Driven by --chart-1..8 in index.css.
+passportTheme.lifecycleColors        // ["hsl(var(--chart-1))", ..., "--chart-4"]
+passportTheme.recycledContentColors  // ["hsl(var(--chart-1))", ..., "--chart-8"]
+passportTheme.lineColors             // Named colors for line chart series (same ramp)
 passportTheme.pieChart               // Large donut: innerRadius, outerRadius, paddingAngle
 passportTheme.smallPieChart          // Small donut (recycled content)
 passportTheme.barChart               // Bar corner radius
@@ -153,6 +188,19 @@ passportTheme.lineChart              // strokeWidth, dotRadius
 passportTheme.gridStroke             // CartesianGrid stroke color
 passportTheme.primaryFill            // Default bar/area fill
 ```
+
+### `src/components/ui/button.tsx` — Button variants
+
+Custom variants and sizes added on top of shadcn defaults via CVA:
+
+| Variant | Style | Use |
+|---|---|---|
+| `pill` | rounded-full, primary/10 fill, primary/20 border | Header action buttons (QR, JSON, visibility) |
+| `outline` | border, `text-primary`, `hover:bg-primary/5` | Download buttons throughout all tabs |
+
+| Size | Dimensions | Use |
+|---|---|---|
+| `xs` | `h-7 px-3 text-xs` | Header pill buttons |
 
 ---
 
@@ -169,9 +217,9 @@ Import from the barrel: `import { InfoRow, FileLinkCard, GaugeCard } from "@/com
 | `FileInlineLink` | `file: FileValue\|null, label?` | Compact anchor link (Supply Chain, Symbols) |
 | `SymbolImage` | `src: string\|null, alt` | Image with `ImageOff` fallback |
 | `GaugeCard` | `label, value, unit, max` | Circular SVG gauge card |
-| `StatBox` | `label, value` | Centered stat display |
+| `StatBox` | `label, value, subtext?` | Centered stat display; optional secondary line below value |
 
-All primitives respect the null sentinel: passing `null` either hides the component or renders a "Not provided" placeholder, depending on variant.
+All primitives respect the null sentinel: passing `null` returns `null` — the component renders nothing. Tabs then guard entire cards with the same pattern so empty sections disappear too.
 
 ---
 
@@ -280,6 +328,8 @@ Numbers become strings. Booleans become `"true"` / `"false"`. The typed data str
 - **`""`** → field was returned but has no value → component renders `–`
 - **`"some value"`** → renders the value
 
+This applies at two levels. **Field level**: every primitive returns `null` when its value is `null`. **Section level**: each card checks whether any of its fields are non-null before rendering — if all fields in a card are null, the entire card is hidden. Both levels must be implemented for visibility switching to work correctly.
+
 If you accidentally default fields to `""` instead of `null`, hidden fields will render as `–` regardless of visibility level, breaking the role-based hiding behaviour. Always use `null` in `createEmptyPassportData`.
 
 ---
@@ -326,11 +376,15 @@ The primitives folder is the only place shared display logic should live. Do not
 
 ### Chart colors and geometry — always use the theme
 
-Never hardcode HSL values or pixel dimensions in a tab component. Add new color arrays or geometry constants to `passportTheme.ts` and import from there. This keeps all visual decisions in one place and makes palette changes a one-line edit.
+Never hardcode HSL values or pixel dimensions in a tab component.
+
+For **pie charts**: use the shared ramp via `passportTheme.lifecycleColors` (steps 1–4) or `passportTheme.recycledContentColors` (all 8). The palette is defined once in `--chart-1..8` in `index.css` and flows through both arrays.
+
+For **new chart types**: add new color arrays or geometry constants to `passportTheme.ts` and reference `hsl(var(--chart-N))` for colors, not hardcoded HSL literals. This ensures dark mode and palette changes work from one place.
 
 ```ts
 // Add to passportTheme.ts
-bomColors: ["hsl(160, 84%, 39%)", "hsl(200, 70%, 50%)", ...],
+bomColors: ["hsl(var(--chart-1))", "hsl(var(--chart-2))", ...],
 treemapChart: { padding: 4 },
 
 // Use in tab
@@ -380,6 +434,25 @@ fill={passportTheme.bomColors[i]}
 12. src/App.tsx
     → add new route: <Route path="/<domain>/:id" element={<Domain />} />
 ```
+
+---
+
+## Header Features
+
+| Feature | Details |
+|---|---|
+| **Visibility selector** | Pill-shaped dropdown; writes `?visibility=` to URL; React Query re-fetches on change |
+| **QR dialog** | Renders passport URL as QR code with Synex brand mark centred (error correction `H`); copy link or download SVG |
+| **JSON viewer** | Pretty / Raw toggle; syntax-highlighted dark code block (keys, strings, numbers, booleans, null each in distinct colour); download always saves pretty-printed JSON |
+| **Status badge** | Shows DPP status and schema version from live API data |
+
+All header interactive elements use `Button variant="pill" size="xs"` for visual consistency.
+
+---
+
+## Icon Convention
+
+Icons in `CardTitle` are reserved for **warning/alert contexts only** (`AlertTriangle text-destructive`). This applies to Hazardous Substances and Negative Events. All other sections use plain text titles — decorative icons in headers were removed to keep this distinction meaningful.
 
 ---
 

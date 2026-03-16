@@ -45,18 +45,17 @@
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 0 0% 83%;
     --sidebar-ring: 20 90% 48%;
-    --chart-1: 27 95% 60%;
-    --chart-2: 43 96% 56%;
-    --chart-3: 47 95% 53%;
-    --chart-4: 24 94% 53%;
-    --chart-5: 0 0% 45%;
-    --chart-6: 200 70% 50%;
-    --chart-7: 280 50% 55%;
-    --chart-8: 160 60% 45%;
-    --chart-lifecycle-1: 160 84% 39%;
-    --chart-lifecycle-2: 200 70% 50%;
-    --chart-lifecycle-3: 40 90% 55%;
-    --chart-lifecycle-4: 280 50% 55%;
+    /* ── Unified pie chart ramp (warm orange → golden) ─────────
+       All pie charts share this scale. Lifecycle uses steps 1–4,
+       recycled content uses all 8 steps.                         */
+    --chart-1: 13 72% 40%;   /* burnt rust   */
+    --chart-2: 20 90% 48%;   /* primary orange */
+    --chart-3: 38 84% 56%;   /* amber          */
+    --chart-4: 48 88% 63%;   /* golden yellow  */
+    --chart-5: 30 58% 64%;   /* warm peach     */
+    --chart-6: 25 46% 50%;   /* warm brown     */
+    --chart-7: 17 76% 52%;   /* mid orange     */
+    --chart-8: 45 72% 73%;   /* pale gold      */
     --sidebar: 0 0% 98%;
     --font-sans: 'Roboto', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
     --font-serif: 'Libre Caslon Text', ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
@@ -110,18 +109,15 @@
     --sidebar-accent-foreground: 20 91% 14%;
     --sidebar-border: 0 0% 32%;
     --sidebar-ring: 27 95% 60%;
-    --chart-1: 30 97% 72%;
-    --chart-2: 45 96% 64%;
-    --chart-3: 48 96% 76%;
-    --chart-4: 27 95% 60%;
-    --chart-5: 0 0% 45%;
-    --chart-6: 200 70% 55%;
-    --chart-7: 280 50% 60%;
-    --chart-8: 160 60% 50%;
-    --chart-lifecycle-1: 160 84% 45%;
-    --chart-lifecycle-2: 200 70% 55%;
-    --chart-lifecycle-3: 40 90% 60%;
-    --chart-lifecycle-4: 280 50% 60%;
+    /* ── Unified pie chart ramp — dark mode (brightened) ───── */
+    --chart-1: 15 75% 52%;   /* burnt rust     */
+    --chart-2: 22 92% 60%;   /* primary orange */
+    --chart-3: 40 86% 64%;   /* amber          */
+    --chart-4: 50 90% 70%;   /* golden yellow  */
+    --chart-5: 32 62% 70%;   /* warm peach     */
+    --chart-6: 27 50% 58%;   /* warm brown     */
+    --chart-7: 19 80% 60%;   /* mid orange     */
+    --chart-8: 46 75% 78%;   /* pale gold      */
     --sidebar: 0 0% 14%;
     --shadow-2xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
     --shadow-xs: 0 1px 3px 0px hsl(0 0% 0% / 0.05);
