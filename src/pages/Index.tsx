@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { usePassportData } from "@/hooks/usePassportData";
+import { applyDesign } from "@/utils/applyDesign";
 import Header from "@/components/passport/Header";
 import IdentityCard from "@/components/passport/IdentityCard";
 import Footer from "@/components/passport/Footer";
@@ -20,13 +21,19 @@ const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const visibility = searchParams.get("visibility") ?? "internal";
   const setVisibility = (v: string) => setSearchParams({ visibility: v });
-  const { data, isLoading, error } = usePassportData(id, visibility);
+  const { data: queryResult, isLoading, error } = usePassportData(id, visibility);
+  const data = queryResult?.data;
+  const design = queryResult?.design ?? null;
 
   useEffect(() => {
     const name = data?.general.identifiers.batteryId ?? id ?? "Battery Passport";
     document.title = `${name} | Battery Passport`;
     return () => { document.title = "Battery Passport"; };
   }, [data, id]);
+
+  useEffect(() => {
+    applyDesign(design);
+  }, [design]);
 
   if (isLoading) {
     return (
@@ -54,7 +61,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Header data={data.general.dppInfo} passportData={data} visibility={visibility} onVisibilityChange={setVisibility} />
+      <Header data={data.general.dppInfo} passportData={data} visibility={visibility} onVisibilityChange={setVisibility} logoUrl={design?.logo_url ?? null} />
       <main className="mx-auto max-w-6xl px-4 py-6">
         <IdentityCard data={data.general} />
         <Tabs defaultValue="identifiers" className="w-full">
@@ -63,7 +70,7 @@ const Index = () => {
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
-                className="rounded-full border px-4 py-2 text-sm data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="rounded border px-4 py-2 text-sm data-[state=active]:border-primary data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
               >
                 {tab.label}
               </TabsTrigger>

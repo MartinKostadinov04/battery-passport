@@ -34,10 +34,25 @@ export interface OntologyResponse {
   };
 }
 
+export interface DesignPaletteEntry {
+  lightness: number;
+  hex: string;
+}
+
+export interface DesignData {
+  palette: DesignPaletteEntry[];
+  rounding: number;
+  shadow: number;
+  logo: string | null;
+  logo_url: string | null;
+  font: string;
+}
+
 export interface PassportDataResponse {
   last_updated: string;
   properties: Record<string, { value: string | number | string[] | FileValue }>;
   friendly_id: string | null;
+  design?: DesignData | null;
 }
 
 // Per-tab typed data structures

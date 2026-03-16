@@ -2,6 +2,7 @@ import type {
   PassportDataResponse,
   PassportData,
   FileValue,
+  DesignData,
 } from "@/types/passport";
 import { PROPERTY_PATH_MAP } from "@/data/propertyMap";
 
@@ -68,15 +69,25 @@ function normalizeValue(raw: string | number | string[] | FileValue): string | s
   return String(raw);
 }
 
-export async function fetchPassport(passportId: string, visibility = "internal"): Promise<PassportData> {
-  const data = await fetchPassportValues(passportId, visibility);
-  const passport = createEmptyPassportData();
+export interface FetchPassportResult {
+  data: PassportData;
+  design: DesignData | null;
+}
 
-  for (const [propId, entry] of Object.entries(data.properties)) {
+export async function fetchPassport(passportId: string, visibility = "internal"): Promise<FetchPassportResult> {
+  const raw = await fetchPassportValues(passportId, visibility);
+  const data = createEmptyPassportData();
+
+  for (const [propId, entry] of Object.entries(raw.properties)) {
     const path = PROPERTY_PATH_MAP[propId];
     if (!path) continue;
-    setNestedValue(passport as unknown as Record<string, unknown>, path, normalizeValue(entry.value));
+    setNestedValue(data as unknown as Record<string, unknown>, path, normalizeValue(entry.value));
   }
 
-  return passport;
+  // Top-level last_updated is the authoritative timestamp — use as fallback
+  if (raw.last_updated && data.general.dppInfo.lastUpdated === null) {
+    data.general.dppInfo.lastUpdated = raw.last_updated;
+  }
+
+  return { data, design: raw.design ?? null };
 }

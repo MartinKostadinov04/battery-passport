@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { SymbolsLabelsData } from "@/types/passport";
-import { Shield, AlertCircle, ImageOff } from "lucide-react";
-import { SymbolImage, FileInlineLink } from "@/components/passport/primitives";
+import { Shield, AlertCircle } from "lucide-react";
+import { SymbolImage, FileRow } from "@/components/passport/primitives";
 
 interface SymbolsLabelsTabProps {
   data: SymbolsLabelsData;
@@ -11,35 +11,36 @@ const SymbolsLabelsTab = ({ data }: SymbolsLabelsTabProps) => {
   const hasSafetyInfo = data.extinguishingAgent !== null || data.labelMeaning !== null;
   const hasConformityDocs = data.euDeclarationOfConformity !== null || data.testReports !== null;
 
+  const regulatorySymbols = [
+    { file: data.separateCollectionSymbol, alt: "Separate Collection", label: "Separate Collection Symbol", desc: "Indicates necessity of separate collection" },
+    { file: data.cadmiumLeadSymbol, alt: "Cd/Pb", label: "Cadmium & Lead Symbols", desc: "Chemical symbols for Cd/Pb content" },
+    { file: data.carbonFootprintLabel, alt: "Carbon Footprint Label", label: "Carbon Footprint Label", desc: "Declared carbon footprint class" },
+  ].filter(({ file }) => file !== null);
+
   return (
     <div className="space-y-6">
       <div className="grid gap-6 md:grid-cols-2">
-        {/* Regulatory Symbols — always shown, ImageOff for null slots */}
-        <Card>
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Regulatory Symbols</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {[
-              { file: data.separateCollectionSymbol, alt: "Separate Collection", label: "Separate Collection Symbol", desc: "Indicates necessity of separate collection" },
-              { file: data.cadmiumLeadSymbol, alt: "Cd/Pb", label: "Cadmium & Lead Symbols", desc: "Chemical symbols for Cd/Pb content" },
-              { file: data.carbonFootprintLabel, alt: "Carbon Footprint Label", label: "Carbon Footprint Label", desc: "Declared carbon footprint class" },
-            ].map(({ file, alt, label, desc }) => (
-              <div key={label} className="flex items-center gap-4 border-b border-dashed pb-3 last:border-0 last:pb-0">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md border p-2">
-                  {file
-                    ? <SymbolImage file={file} alt={alt} />
-                    : <ImageOff className="h-6 w-6 text-muted-foreground/40" />
-                  }
+        {/* Regulatory Symbols — only shown when at least one symbol is available */}
+        {regulatorySymbols.length > 0 && (
+          <Card>
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base">Regulatory Symbols</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {regulatorySymbols.map(({ file, alt, label, desc }) => (
+                <div key={label} className="flex items-center gap-4 border-b border-dashed pb-3 last:border-0 last:pb-0">
+                  <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-md border p-2">
+                    <SymbolImage file={file!} alt={alt} />
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{label}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{desc}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm font-medium">{label}</p>
-                  <p className="text-xs text-muted-foreground mt-0.5">{file ? desc : "Not provided"}</p>
-                </div>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
+              ))}
+            </CardContent>
+          </Card>
+        )}
 
         {/* Safety Information */}
         {hasSafetyInfo && (
@@ -51,8 +52,8 @@ const SymbolsLabelsTab = ({ data }: SymbolsLabelsTabProps) => {
               {data.extinguishingAgent !== null && (
                 <div>
                   <div className="flex items-center gap-2 mb-1.5">
-                    <AlertCircle className="h-4 w-4 text-orange-600 dark:text-orange-400 shrink-0" />
-                    <p className="text-xs font-semibold uppercase tracking-wide text-orange-700 dark:text-orange-400">Extinguishing Agent</p>
+                    <AlertCircle className="h-4 w-4 text-destructive shrink-0" />
+                    <p className="text-xs font-semibold uppercase tracking-wide text-destructive">Extinguishing Agent</p>
                   </div>
                   <p className="text-sm whitespace-pre-line">{data.extinguishingAgent || "–"}</p>
                 </div>
@@ -75,24 +76,8 @@ const SymbolsLabelsTab = ({ data }: SymbolsLabelsTabProps) => {
             <CardTitle className="text-base">Documentation of Conformity</CardTitle>
           </CardHeader>
           <CardContent>
-            {data.euDeclarationOfConformity !== null && (
-              <div className="flex items-center justify-between gap-4 border-b border-dashed py-4 first:pt-0">
-                <div className="flex items-center gap-3">
-                  <Shield className="h-5 w-5 text-primary shrink-0" />
-                  <p className="text-sm font-medium">EU Declaration of Conformity</p>
-                </div>
-                <FileInlineLink file={data.euDeclarationOfConformity} />
-              </div>
-            )}
-            {data.testReports !== null && (
-              <div className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0">
-                <div className="flex items-center gap-3">
-                  <Shield className="h-5 w-5 text-primary shrink-0" />
-                  <p className="text-sm font-medium">Test Reports Proving Compliance</p>
-                </div>
-                <FileInlineLink file={data.testReports} />
-              </div>
-            )}
+            <FileRow icon={Shield} title="EU Declaration of Conformity" file={data.euDeclarationOfConformity} />
+            <FileRow icon={Shield} title="Test Reports Proving Compliance" file={data.testReports} />
           </CardContent>
         </Card>
       )}

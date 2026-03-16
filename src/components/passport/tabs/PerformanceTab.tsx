@@ -131,52 +131,55 @@ const PerformanceTab = ({ data }: PerformanceTabProps) => {
           )}
           {hasExtremeData && (
             <div>
-              <p className="text-xs uppercase tracking-wide text-muted-foreground mb-3">Time Spent in Extreme Temperatures (minutes)</p>
-              <ChartContainer config={{ minutes: { label: "Minutes", color: "hsl(var(--primary))" } }} className="h-[220px] w-full overflow-x-auto">
-                <BarChart data={extremeTemps}>
-                  <CartesianGrid strokeDasharray="3 3" stroke={passportTheme.gridStroke} />
-                  <XAxis dataKey="label" tick={{ fontSize: 10 }} angle={-15} textAnchor="end" height={60} />
-                  <YAxis tick={{ fontSize: 12 }} />
-                  <Tooltip />
-                  <Bar dataKey="minutes" fill={passportTheme.primaryFill} radius={passportTheme.barChart.radius} />
-                </BarChart>
-              </ChartContainer>
+              <p className={`${passportTheme.typography.sectionLabel} mb-3`}>Time Spent in Extreme Temperatures (minutes)</p>
+              <div className="overflow-x-auto">
+                <div className="min-w-[360px]">
+                  <ChartContainer config={{ minutes: { label: "Minutes", color: "hsl(var(--primary))" } }} className={`${passportTheme.chartHeight.bar} w-full`}>
+                    <BarChart data={extremeTemps}>
+                      <CartesianGrid strokeDasharray="3 3" stroke={passportTheme.gridStroke} />
+                      <XAxis dataKey="label" tick={{ fontSize: passportTheme.chartAxis.tickFontSize }} angle={passportTheme.chartAxis.barXAngle} textAnchor="end" height={passportTheme.chartAxis.barXHeight} />
+                      <YAxis tick={{ fontSize: passportTheme.chartAxis.labelFontSize }} />
+                      <Tooltip />
+                      <Bar dataKey="minutes" fill={passportTheme.primaryFill} radius={passportTheme.barChart.radius} />
+                    </BarChart>
+                  </ChartContainer>
+                </div>
+              </div>
             </div>
           )}
         </CardContent>
       </Card>
 
       {/* Negative Events */}
-      <Card>
-        <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <AlertTriangle className="h-4 w-4 text-destructive" /> Negative Events
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <InfoRow label="Deep Discharge Events" value={ne.deepDischargeEvents} />
-          <InfoRow label="Overcharge Events" value={ne.overchargeEvents} />
-          <div className="flex items-center justify-between gap-4 border-b border-dashed py-4 last:border-0">
-            <div className="flex items-start gap-3 min-w-0">
-              <AlertTriangle className="h-5 w-5 mt-0.5 text-destructive shrink-0" />
-              <div>
-                <p className="text-sm font-medium">Accident Information</p>
-                {ne.accidents
-                  ? <p className="text-xs text-muted-foreground mt-0.5">{ne.accidents.filename}</p>
-                  : <p className="text-xs text-muted-foreground italic mt-0.5">Not provided</p>
-                }
-              </div>
-            </div>
+      {(ne.deepDischargeEvents !== null || ne.overchargeEvents !== null || ne.accidents !== null) && (
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <AlertTriangle className="h-4 w-4 text-muted-foreground" /> Negative Events
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <InfoRow label="Deep Discharge Events" value={ne.deepDischargeEvents} />
+            <InfoRow label="Overcharge Events" value={ne.overchargeEvents} />
             {ne.accidents && (
-              <Button variant="outline" size="sm" asChild className="shrink-0">
-                <a href={ne.accidents.link} target="_blank" rel="noopener noreferrer">
-                  <Download className="h-3.5 w-3.5" /> Download
-                </a>
-              </Button>
+              <div className="flex items-center justify-between gap-4 border-b border-dashed py-4 last:border-0">
+                <div className="flex items-start gap-3 min-w-0">
+                  <AlertTriangle className="h-5 w-5 mt-0.5 text-destructive shrink-0" />
+                  <div>
+                    <p className="text-sm font-medium">Accident Information</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{ne.accidents.filename}</p>
+                  </div>
+                </div>
+                <Button variant="outline" size="sm" asChild className="shrink-0">
+                  <a href={ne.accidents.link} target="_blank" rel="noopener noreferrer">
+                    <Download className="h-3.5 w-3.5" /> Download
+                  </a>
+                </Button>
+              </div>
             )}
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

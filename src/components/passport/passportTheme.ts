@@ -1,10 +1,12 @@
 // Central design tokens for all passport-specific visuals.
-// Change colors or chart geometry here — it propagates everywhere.
+// Change any value here — it propagates to every component that imports passportTheme.
+//
+// Runtime theming: applyDesign() in src/utils/applyDesign.ts overrides the CSS custom
+// properties below at page load when the API returns a design object. The tokens here
+// (hsl(var(--...))) will therefore automatically reflect the operator's brand.
 
 export const passportTheme = {
-  // ── Color palettes ────────────────────────────────────────
-  // Both pie charts share the same ramp — lifecycle uses steps 1–4,
-  // recycled content uses all 8. Change --chart-1..8 in index.css to retheme both.
+  // ── Chart color palettes ──────────────────────────────────
   lifecycleColors: [
     "hsl(var(--chart-1))",
     "hsl(var(--chart-2))",
@@ -21,7 +23,6 @@ export const passportTheme = {
     "hsl(var(--chart-7))",
     "hsl(var(--chart-8))",
   ],
-  // Line chart series colors — also drawn from the unified ramp
   lineColors: {
     capacityFade: "hsl(var(--chart-1))",
     powerFade:    "hsl(var(--chart-2))",
@@ -30,20 +31,29 @@ export const passportTheme = {
     cycles:       "hsl(var(--chart-4))",
   },
 
+  // ── JSON viewer syntax colours ────────────────────────────
+  jsonSyntax: {
+    whitespace:  "text-neutral-500",
+    key:         "text-sky-400",
+    string:      "text-emerald-400",
+    boolean:     "text-amber-400",
+    null:        "text-rose-400",
+    number:      "text-violet-400",
+    punctuation: "text-neutral-500",
+    codeBg:      "bg-neutral-950",
+  },
+
   // ── Chart geometry ────────────────────────────────────────
-  // Large donut — Carbon Footprint lifecycle breakdown
   pieChart: {
     innerRadius: 70,
     outerRadius: 110,
     paddingAngle: 3,
   },
-  // Small donut — Circularity recycled content
   smallPieChart: {
     innerRadius: 60,
     outerRadius: 100,
     paddingAngle: 2,
   },
-  // Bar & line chart shared settings
   barChart: {
     radius: [4, 4, 0, 0] as [number, number, number, number],
   },
@@ -52,7 +62,45 @@ export const passportTheme = {
     dotRadius: 3,
   },
 
+  // ── Chart container heights ───────────────────────────────
+  chartHeight: {
+    bar:      "h-[220px]",
+    smallPie: "h-[280px]",
+    largePie: "h-[320px]",
+  },
+
+  // ── Chart axis configuration ──────────────────────────────
+  chartAxis: {
+    tickFontSize:  10,
+    labelFontSize: 12,
+    barXAngle:     -15,
+    barXHeight:    60,
+  },
+
+  // ── Gauge SVG configuration ───────────────────────────────
+  gauge: {
+    containerClass: "relative h-24 w-24",
+    strokeWidth:    8,
+    cx:             50,
+    cy:             50,
+    r:              42,
+    circumference:  264,
+  },
+
   // ── Shared chart styling ──────────────────────────────────
   gridStroke:  "hsl(var(--border))",
   primaryFill: "hsl(var(--primary))",
+
+  // ── Typography ────────────────────────────────────────────
+  typography: {
+    sectionLabel: "text-xs uppercase tracking-wide text-muted-foreground",
+    fieldLabel:   "text-sm text-muted-foreground",
+    fieldValue:   "text-sm font-medium",
+    metaText:     "text-xs text-muted-foreground",
+    bodyText:     "text-sm whitespace-pre-line",
+    monoId:       "font-mono text-xs",
+    statValue:    "text-lg font-bold",
+    statValueLg:  "text-3xl font-bold",
+    cardTitle:    "text-base",
+  },
 } as const;

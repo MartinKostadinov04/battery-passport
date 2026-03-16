@@ -1,0 +1,10 @@
+<svg width="63" height="63" viewBox="0 0 63 63" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M62.5789 47.3777L15.2026 0.00146484L8.26006e-05 15.204L47.3763 62.5802L62.5789 47.3777Z" fill="#474747"/>
+<path d="M47.4041 2.43688e-06L0.027832 47.3762L15.2304 62.5788L62.6066 15.2026L47.4041 2.43688e-06Z" fill="url(#synex-grad)"/>
+<defs>
+  <linearGradient id="synex-grad" x1="14.8468" y1="62.1952" x2="62.6045" y2="15.2007" gradientUnits="userSpaceOnUse">
+    <stop stop-color="#474747"/>
+    <stop offset="1" stop-color="#B3B3B3"/>
+  </linearGradient>
+</defs>
+</svg>

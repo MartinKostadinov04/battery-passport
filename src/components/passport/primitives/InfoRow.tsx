@@ -1,6 +1,10 @@
 // Unified key-value row. null → hidden; "" → "–"; value → displayed.
 // Optional unit is appended after the value (e.g. "200 Ah").
 
+import { passportTheme } from "@/components/passport/passportTheme";
+
+const t = passportTheme.typography;
+
 interface InfoRowProps {
   label: string;
   value: string | number | null;
@@ -13,9 +17,9 @@ export const InfoRow = ({ label, value, unit }: InfoRowProps) => {
     ? unit ? `${value} ${unit}` : value
     : "–";
   return (
-    <div className="flex justify-between border-b border-dashed py-2.5 last:border-0">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-sm font-medium text-right max-w-[60%] break-words">{display}</span>
+    <div className="flex items-baseline gap-4 border-b border-dashed py-2.5 last:border-0">
+      <span className={`${t.fieldLabel} shrink-0`}>{label}</span>
+      <span className={`${t.fieldValue} text-right ml-auto break-words min-w-0`}>{display}</span>
     </div>
   );
 };

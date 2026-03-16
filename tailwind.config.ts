@@ -96,7 +96,7 @@ export default {
   		},
   		fontFamily: {
   			sans: [
-  				'Roboto',
+  				'var(--font-sans)',
   				'ui-sans-serif',
   				'system-ui',
   				'-apple-system',
